@@ -1,0 +1,143 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-accent: var(--c-accent);
+  --color-accent-ink: var(--c-accent-ink);
+  --font-display: var(--f-display);
+  --font-sans: var(--f-body);
+  --radius-card: var(--r-card);
+}
+
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; scroll-padding-top: var(--header-h); overflow-x: clip; }
+  body {
+    @apply bg-bg font-sans text-text antialiased;
+    overflow-x: clip;
+  }
+  ::selection { background: var(--c-accent); color: var(--c-accent-ink); }
+  :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 6px; }
+}
+
+/* ── Utilidades de la marca ─────────────────────────────────── */
+@utility wrap {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+@utility section-y {
+  padding-block: var(--section-y);
+}
+@utility display {
+  font-family: var(--f-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: var(--tracking-display);
+}
+@utility label-caps {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-semibold transition-colors duration-300;
+}
+@utility btn-accent {
+  @apply btn bg-accent text-accent-ink hover:bg-text;
+}
+@utility btn-outline {
+  @apply btn border border-line text-text hover:border-text;
+}
+@utility glass {
+  background: color-mix(in srgb, var(--c-bg) 55%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* Grano fotográfico sobre toda la página (no intercepta clics) */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Brillo difuso del acento detrás de secciones clave */
+.glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c-accent) 22%, transparent) 0%, transparent 65%);
+  filter: blur(20px);
+}
+
+/* Fotos en duotono: desaturadas con un velo del acento; recuperan color en hover */
+.duo { position: relative; overflow: hidden; background: var(--c-surface); }
+.duo img { filter: grayscale(1) contrast(1.15) brightness(0.85); transition: filter 0.6s var(--ease-out), transform 0.8s var(--ease-out); }
+.duo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 35%, color-mix(in srgb, var(--c-accent) 28%, transparent));
+  mix-blend-mode: multiply;
+  transition: opacity 0.6s;
+}
+.duo-hover:hover img, .duo-hover:focus-within img { filter: grayscale(0.2) contrast(1.05) brightness(0.95); }
+
+/* Marquee */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 32s linear infinite; }
+
+/* Borde de gradiente animado del plan destacado */
+@property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes spin-angle { to { --angle: 360deg; } }
+.gradient-border {
+  position: relative;
+  background: linear-gradient(var(--c-surface), var(--c-surface)) padding-box,
+    conic-gradient(from var(--angle), var(--c-accent), transparent 30%, transparent 60%, var(--c-accent)) border-box;
+  border: 2px solid transparent;
+  animation: spin-angle 5s linear infinite;
+}
+
+/* Pulso del botón de WhatsApp */
+@keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.55; } 100% { transform: scale(1.7); opacity: 0; } }
+.pulse-ring { animation: pulse-ring 2.4s var(--ease-out) infinite; }
+
+/* Indicador de scroll */
+@keyframes scroll-dot { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
+.scroll-dot { animation: scroll-dot 1.8s ease-in-out infinite; }
+
+/* Carrusel con snap (mobile) sin barra visible */
+.snap-row { scroll-snap-type: x mandatory; scrollbar-width: none; }
+.snap-row::-webkit-scrollbar { display: none; }
+
+/* Mapa en modo oscuro */
+.map-dark { filter: invert(0.92) hue-rotate(180deg) grayscale(0.6) contrast(0.95); }
+
+/* Cursor personalizado: solo con puntero fino */
+@media (pointer: fine) {
+  .has-cursor, .has-cursor a, .has-cursor button { cursor: none; }
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+/* Movimiento reducido: sin marquee, pulsos ni bordes animados */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .pulse-ring, .scroll-dot, .gradient-border { animation: none !important; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,36 @@
+/* ─────────────────────────────────────────────────────────────
+   FORJA · Tokens de diseño
+   Único lugar para cambiar colores, tipografías, radios y espaciados.
+   Tailwind los expone como utilidades: bg-bg, text-accent, font-display, rounded-card…
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Color */
+  --c-bg: #0a0a0a;          /* fondo casi negro */
+  --c-surface: #141414;     /* tarjetas grafito */
+  --c-surface-2: #1c1c1c;
+  --c-line: rgba(245, 241, 232, 0.12);
+  --c-text: #f5f1e8;        /* blanco cálido */
+  --c-muted: #a8a49b;       /* texto secundario (contraste AA sobre --c-bg) */
+  --c-accent: #c6ff00;      /* verde lima: solo CTAs y detalles */
+  --c-accent-ink: #0a0a0a;  /* texto sobre el acento */
+
+  /* Tipografía */
+  --f-display: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --f-body: "Inter Tight Variable", "Inter Tight", system-ui, sans-serif;
+  --t-hero: clamp(64px, 14vw, 180px);
+  --t-h2: clamp(48px, 9vw, 128px);
+  --t-h3: clamp(32px, 4.4vw, 56px);
+  --tracking-display: -0.01em;
+  --tracking-label: 0.22em;
+
+  /* Forma y espacio */
+  --r-card: 28px;
+  --r-pill: 999px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --section-y: clamp(96px, 14vw, 200px);
+  --header-h: 72px;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
